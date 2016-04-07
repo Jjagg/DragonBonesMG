@@ -1,0 +1,8 @@
+.vs
+bin/
+obj/
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
