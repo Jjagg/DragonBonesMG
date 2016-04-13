@@ -1,7 +1,7 @@
 ﻿using System;
 using DragonBonesMG;
+using DragonBonesMG.Core;
 using DragonBonesMG.Display;
-using DragonBonesMG.JsonData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -32,7 +32,6 @@ namespace DragonBoneTest {
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize() {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -47,12 +46,16 @@ namespace DragonBoneTest {
 
             _buffer = new RenderTarget2D(GraphicsDevice, 1000, 2000);
 
-            atlas = TextureAtlas.FromJson("texture.json");
+            atlas = TextureAtlas.FromJson("Content/Culling.json");
             atlas.LoadContent(Content);
 
-            Armature = DragonBones.ArmatureFromJson("Dragon_Test.json", atlas);
-            Armature.GotoAndStop("jump", 0);
-            Armature.SetTimeScale(0.1);
+            Armature = DragonBones.ArmatureFromJson("Content/Meshes.json", atlas);
+            Armature.GotoAndPlay("morph");
+            Armature.SetTimeScale(0.3);
+
+            //Armature = DragonBones.ArmatureFromJson("Content/SolveCulling.json", atlas);
+            //Armature.GotoAndPlay("tweening");
+            //Armature.SetTimeScale(0.3);
         }
 
         /// <summary>
@@ -60,7 +63,6 @@ namespace DragonBoneTest {
         /// game-specific content.
         /// </summary>
         protected override void UnloadContent() {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -83,18 +85,16 @@ namespace DragonBoneTest {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
-            // TODO special spritebatch wrapper to which we can push and pop transformation matrices!
-            GraphicsDevice.SetRenderTarget(_buffer);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            Armature.Draw(spriteBatch, Matrix.CreateTranslation(400, 500, 0) *
-                                       Matrix.CreateScale(0.4f, 0.4f, 1f));
+            GraphicsDevice.Clear(Color.Black);
+            var texture = atlas.Get("Culling").RenderToTexture(spriteBatch);
 
-            GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            Armature.Draw(spriteBatch, Matrix.CreateTranslation(300, 200, 0), new Color(0, 0.5f, 1));
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(transformMatrix:
+                Matrix.CreateRotationZ(MathHelper.PiOver4) * Matrix.CreateTranslation(100, 100, 0));
 
-            spriteBatch.Draw(_buffer, new Vector2(250, 100));
+            atlas.Get("Culling").Draw(spriteBatch);
+            spriteBatch.Draw(texture, new Vector2(100));
 
             spriteBatch.End();
             base.Draw(gameTime);

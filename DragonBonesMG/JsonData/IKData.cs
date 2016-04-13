@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class IKData {
+    internal class IKData {
         public string Name;
         public string Target;
         public int Weight;

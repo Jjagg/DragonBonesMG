@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class SkinData {
+    internal class SkinData {
         public string Name;
 
         [JsonProperty(PropertyName = "slot")]

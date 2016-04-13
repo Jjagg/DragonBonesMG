@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class ArmatureData {
+    internal class ArmatureData {
         public string Name;
         public string Type;
         public int FrameRate;

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class FFDTimelineData {
+    internal class FFDTimelineData {
         // TODO figure this out
 
         public string Name;

@@ -1,5 +1,5 @@
 ﻿namespace DragonBonesMG.JsonData {
-    public class SlotData {
+    internal class SlotData {
         public string Name;
         public string Parent;
         public int Z;

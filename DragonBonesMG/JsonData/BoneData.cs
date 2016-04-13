@@ -1,5 +1,5 @@
 ﻿namespace DragonBonesMG.JsonData {
-    public class BoneData {
+    internal class BoneData {
         public string Name;
         public TransformData Transform;
         public int Length;

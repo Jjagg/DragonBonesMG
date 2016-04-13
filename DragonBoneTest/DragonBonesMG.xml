@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DragonBonesMG</name>
+    </assembly>
+    <members>
+        <member name="T:DragonBonesMG.Animation.BoneTimeline">
+            <summary>
+            A BoneTimeline holds the transform keyframes for a single bone.
+            <see cref="P:DragonBonesMG.Animation.BoneTimeline.Tween"/> holds the current transform of the bone this is the timeline of.
+            </summary>
+        </member>
+        <member name="T:DragonBonesMG.Animation.DbAnimationState">
+            <summary>
+            A specific moment within an <see cref="T:DragonBonesMG.Animation.DbAnimation"/>. 
+            This data class holds all transforms for that moment in the animation.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Animation.DbAnimation.Play(System.Boolean)">
+            <summary>
+            Play this animation.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Animation.DbAnimation.Pause">
+            <summary>
+            Pause this animation.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Animation.DbAnimation.GetCurrentState">
+            <summary>
+            Calculate a snapshot of the animation at this instant and return it.
+            </summary>
+        </member>
+        <member name="T:DragonBonesMG.Animation.DisplayTimeline">
+            <summary>
+            Holds a collection of slot timelines.
+            </summary>
+        </member>
+        <member name="T:DragonBonesMG.Animation.TransformTimeline">
+            <summary>
+            A TransformTimeline holds a collection of BoneTimelines. />.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Animation.TransformTimeline.#ctor(DragonBonesMG.JsonData.TransformTimelineData[])">
+            <summary>
+            Create a new TransformTimeline given the data for all bone timelines.
+            </summary>
+            <param name="datas"></param>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbArmature.GetBone(System.String)">
+            <summary>
+            Get the bone with the given name or null if it doesn't exist.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbArmature.AddBone(DragonBonesMG.Core.DbBone)">
+            <summary>
+            Add references to a bone and all its children bones/slots to this armatures 
+            collections of bones and slots for quick lookups.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbArmature.GetSlot(System.String)">
+            <summary>
+            Get the slot with the given name or null if it doesn't exist.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbArmature.AddSlot(DragonBonesMG.Core.DbSlot)">
+            <summary>
+            Add a slot to this armature.
+            </summary>
+            <param name="slot"></param>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbArmature.SortSlots">
+            <summary>
+            Sort slots by zorder.
+            </summary>
+        </member>
+        <member name="P:DragonBonesMG.Core.DbBone.CurrentGlobalTransform">
+            <summary>
+            Transform of this bone with tween calculated in.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbBone.AddBone(DragonBonesMG.Core.DbBone)">
+            <summary>
+            Add the given bone to this bone as its child.
+            Also adds the bone to this bones armature for fast lookups.
+            </summary>
+        </member>
+        <member name="T:DragonBonesMG.Core.DbTransform">
+            <summary>
+            Encapsulates a transformation matrix so we can make sure angular interpolation is done
+            correctly (with a quaternion rather than just linearly).
+            </summary>
+        </member>
+        <member name="F:DragonBonesMG.Core.DbSlot.Displays">
+            <summary>
+            This list is up for grabs for easier editing, but be careful with the transforms.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbSlot.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Draw whatever is in this slot.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbSlot.SetNewDisplay(DragonBonesMG.Display.DbDisplay,Microsoft.Xna.Framework.Matrix)">
+            <summary>
+            Add the display to the list of displays and set it to be the active display.
+            </summary>
+            <param name="display">The display to add and show.</param>
+            <param name="transform">The transform of the display.</param>
+        </member>
+        <member name="M:DragonBonesMG.Core.DbSlot.SetDisplay(System.String)">
+            <summary>
+            Set the display of this slot to the one with the given name, or nothing no display with the given name is present.
+            </summary>
+            <param name="name">The name of the display to set the active display to.</param>
+        </member>
+        <member name="M:DragonBonesMG.Display.ITextureSupplier.Get(System.String)">
+            <summary>
+            Get a drawable that will draw the given texture when drawn.
+            Returns null if the given texture does not exist.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Display.TexturePart.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+            <summary>
+            Assumes SpriteBatch.Begin() has been called.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Display.TextureAtlas.Get(System.String)">
+            <summary>
+            Get a drawable that will draw the given texture when drawn.
+            Returns null if the given texture does not exist.
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.Display.TextureAtlas.FromJson(System.String)">
+            <summary>
+            Parse the json file at the given path and return the resulting TextureAtlas.
+            Don't forget to load the texture using <see cref="M:DragonBonesMG.Display.TextureAtlas.LoadContent(Microsoft.Xna.Framework.Content.ContentManager)"/>.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DragonBonesMG.JsonData.ColorData.ToColor">
+            <summary>
+            Note: premultiplied alpha!
+            </summary>
+        </member>
+        <member name="M:DragonBonesMG.JsonData.ColorData.op_Implicit(DragonBonesMG.JsonData.ColorData)~Microsoft.Xna.Framework.Color">
+            <summary>
+            Note: premultiplied alpha!
+            </summary>
+        </member>
+    </members>
+</doc>

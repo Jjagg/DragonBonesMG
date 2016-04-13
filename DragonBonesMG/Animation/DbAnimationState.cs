@@ -6,13 +6,13 @@
     internal class DbAnimationState {
 
         public readonly TransformTimelineState TransformState;
-        public readonly SlotTimelineState SlotState;
+        public readonly DisplayTimelineState DisplayState;
         public readonly FFDTimelineState FFDState;
 
         public DbAnimationState(TransformTimelineState transformState,
-            SlotTimelineState slotState, FFDTimelineState ffdState) {
+            DisplayTimelineState displayState, FFDTimelineState ffdState) {
             TransformState = transformState;
-            SlotState = slotState;
+            DisplayState = displayState;
             FFDState = ffdState;
         }
     }

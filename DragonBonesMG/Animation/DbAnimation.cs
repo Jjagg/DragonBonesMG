@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using DragonBonesMG.Core;
 using DragonBonesMG.JsonData;
 
 namespace DragonBonesMG.Animation {
     public class DbAnimation {
         public string Name { get; }
         public int Duration { get; }
-        public float DurationTime => Duration * FrameRate;
-        public int PlayTimes { get; set; }
-        public int FrameRate => _armature.FrameRate;
-        private float CurrentFrame => FrameRate * _time;
+        public float DurationTime => Duration / (float) FrameRate;
+        // Not sure if this is ever useful in a game; so not using this. Instead I use Loop below.
+        public readonly int PlayTimes;
+        public bool Loop { get; internal set; }
+        internal int FrameRate => _armature.FrameRate;
+        public float CurrentFrame { get; private set; }
 
         // public bool TweenEnabled { get; private set; }
         internal double TimeScale => _armature.TimeScale;
@@ -18,14 +21,11 @@ namespace DragonBonesMG.Animation {
 
         private SortedSet<int> _keyFrames;
         private readonly TransformTimeline _transformTimeline;
-        private readonly SlotTimeline _slotTimeline;
+        private readonly DisplayTimeline _displayTimeline;
         private readonly FFDTimeline _ffdTimeline;
 
         public bool IsPlaying { get; private set; }
         public bool IsComplete { get; private set; }
-
-        // current time in the animation in seconds
-        private float _time;
 
         // in DragonBones AS, but I'm doing it a bit differently
         //private int _currentFrameIndex;
@@ -34,15 +34,16 @@ namespace DragonBonesMG.Animation {
 
         #region Constructor
 
-        public DbAnimation(DbArmature armature, AnimationData data) {
+        internal DbAnimation(DbArmature armature, AnimationData data) {
             _armature = armature;
             Name = data.Name;
             Duration = data.Duration;
             PlayTimes = data.PlayTimes;
+            Loop = PlayTimes != 0;
 
             // setup timelines
-            _transformTimeline = new TransformTimeline(Duration, data.TransformTimelines);
-            // TODO 
+            _transformTimeline = new TransformTimeline(data.BoneTimelines);
+            _displayTimeline = new DisplayTimeline(data.SlotTimelines);
         }
 
         #endregion
@@ -52,9 +53,10 @@ namespace DragonBonesMG.Animation {
         /// <summary>
         /// Play this animation.
         /// </summary>
-        public void Play() {
+        public void Play(bool loop) {
             IsPlaying = true;
             IsComplete = false;
+            Loop = loop;
         }
 
         /// <summary>
@@ -66,22 +68,19 @@ namespace DragonBonesMG.Animation {
 
         public void Reset() {
             IsPlaying = false;
-            _time = 0;
+            CurrentFrame = 0;
             IsComplete = false;
         }
 
-        public void PassTime(float time) {
-            _time += time;
-            while (_time > DurationTime) {
-                if (PlayTimes == 0) {
-                    IsPlaying = false;
-                    _time = DurationTime;
-                    IsComplete = true;
-                    break;
-                }
-                _time -= DurationTime;
-                if (PlayTimes > 0)
-                    PlayTimes--;
+        internal void PassTime(float elapsed) {
+            CurrentFrame += elapsed * FrameRate;
+            if (CurrentFrame < Duration) return;
+            if (Loop) {
+                CurrentFrame -= Duration;
+            } else {
+                IsPlaying = false;
+                IsComplete = true;
+                CurrentFrame = Duration;
             }
         }
 
@@ -92,9 +91,8 @@ namespace DragonBonesMG.Animation {
         public void Update(TimeSpan elapsed) {
             if (!IsPlaying) return;
             PassTime((float) (TimeScale * elapsed.TotalSeconds));
-            float frame = CurrentFrame;
-            _transformTimeline.Update(frame);
-            //_slotTimeline.Update(frame); TODO
+            _transformTimeline.Update(CurrentFrame);
+            _displayTimeline.Update(CurrentFrame);
             //_ffdTimeline.Update(frame); TODO
         }
 
@@ -105,8 +103,8 @@ namespace DragonBonesMG.Animation {
         /// </summary>
         internal DbAnimationState GetCurrentState() {
             return new DbAnimationState(
-                _transformTimeline.getState(),
-                null,
+                _transformTimeline.GetState(),
+                _displayTimeline.GetState(),
                 null);
             //_slotTimeline.getState(),
             //_ffdTimeline.getState());

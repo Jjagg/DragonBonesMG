@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace DragonBonesMG.Util {
     public class KeyedCollectionImpl<TKey, TValue> : KeyedCollection<TKey, TValue> {

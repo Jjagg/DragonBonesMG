@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class BoneFrameData {
+    internal class BoneFrameData {
         public int Duration;
 
         // from dragonbones.objects.AnimationData
@@ -11,7 +11,7 @@ namespace DragonBonesMG.JsonData {
         public TransformData Transform;
 
         [JsonProperty(PropertyName = "curve")]
-        public CurveData TweenCurve;
+        public float[] TweenCurve;
 
     }
 }

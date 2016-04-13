@@ -4,7 +4,7 @@ namespace DragonBonesMG {
     public class DbIkConstraint {
         private IKData ik;
 
-        public DbIkConstraint(IKData ik) {
+        internal DbIkConstraint(IKData ik) {
             this.ik = ik;
         }
     }

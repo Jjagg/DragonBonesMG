@@ -1,8 +1,7 @@
-﻿using DragonBonesMG.Animation;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class TransformTimelineData {
+    internal class TransformTimelineData {
 
         [JsonProperty(PropertyName = "name")]
         public string BoneName;

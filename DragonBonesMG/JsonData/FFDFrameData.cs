@@ -1,5 +1,5 @@
 ﻿namespace DragonBonesMG.JsonData {
-    public class FFDFrameData {
+    internal class FFDFrameData {
         public float[] Vertices; // TODO
     }
 }

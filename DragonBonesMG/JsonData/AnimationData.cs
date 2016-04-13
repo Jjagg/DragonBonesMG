@@ -1,17 +1,16 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class AnimationData {
-        // TODO: when no debugging is needed anymore, make all *Data internal
+    internal class AnimationData {
         public string Name;
         public int Duration;
         public int PlayTimes;
 
         [JsonProperty(PropertyName = "bone")]
-        public TransformTimelineData[] TransformTimelines;
+        public TransformTimelineData[] BoneTimelines;
 
         [JsonProperty(PropertyName = "slot")]
-        public SlotTimeLineData[] SlotTimelines;
+        public SlotTimelineData[] SlotTimelines;
 
         [JsonProperty(PropertyName = "ffd")]
         public FFDTimelineData[] FfdTimelines;

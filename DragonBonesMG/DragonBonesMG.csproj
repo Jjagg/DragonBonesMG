@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\DragonBonesMG.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +40,7 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SharpDX.MediaFoundation, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,22 +52,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation\BoneFrame.cs" />
+    <Compile Include="Animation\BoneTimeLine.cs" />
     <Compile Include="Animation\DbAnimationState.cs" />
     <Compile Include="Animation\DbAnimation.cs" />
     <Compile Include="Animation\FFDTimeline.cs" />
     <Compile Include="Animation\FFDTimelineState.cs" />
     <Compile Include="Animation\IAnimatable.cs" />
-    <Compile Include="Animation\SlotTimeline.cs" />
-    <Compile Include="Animation\SlotTimelineState.cs" />
+    <Compile Include="Animation\DisplayTimeline.cs" />
+    <Compile Include="Animation\DisplayTimelineState.cs" />
+    <Compile Include="Animation\SlotFrame.cs" />
+    <Compile Include="Animation\SlotState.cs" />
+    <Compile Include="Animation\SlotTimeLine.cs" />
     <Compile Include="Animation\TransformTimeline.cs" />
     <Compile Include="Animation\TransformTimelineState.cs" />
-    <Compile Include="DbArmature.cs" />
-    <Compile Include="DbBone.cs" />
+    <Compile Include="Core\ColorEx.cs" />
+    <Compile Include="Core\DbArmature.cs" />
+    <Compile Include="Core\DbBone.cs" />
+    <Compile Include="Curves\CubicBezier.cs" />
+    <Compile Include="Curves\ITweenCurve.cs" />
+    <Compile Include="Curves\LinearCurve.cs" />
     <Compile Include="DbIkConstraint.cs" />
+    <Compile Include="Display\DbDisplay.cs" />
     <Compile Include="Display\DbImage.cs" />
-    <Compile Include="DbObject.cs" />
-    <Compile Include="DbTransform.cs" />
-    <Compile Include="Display\IDrawable.cs" />
+    <Compile Include="Core\DbObject.cs" />
+    <Compile Include="Core\DbTransform.cs" />
+    <Compile Include="Display\IDrawableDb.cs" />
     <Compile Include="Display\ITextureSupplier.cs" />
     <Compile Include="Display\TexturePart.cs" />
     <Compile Include="Display\TextureAtlas.cs" />
@@ -79,7 +90,6 @@
     <Compile Include="JsonData\TextureAtlasData.cs" />
     <Compile Include="JsonData\TransformTimelineData.cs" />
     <Compile Include="JsonData\ColorData.cs" />
-    <Compile Include="JsonData\CurveData.cs" />
     <Compile Include="JsonData\DbData.cs" />
     <Compile Include="JsonData\DisplayData.cs" />
     <Compile Include="JsonData\BoneFrameData.cs" />
@@ -88,11 +98,11 @@
     <Compile Include="JsonData\SkinData.cs" />
     <Compile Include="JsonData\SlotData.cs" />
     <Compile Include="JsonData\SlotFillData.cs" />
-    <Compile Include="JsonData\SlotTimeLineData.cs" />
+    <Compile Include="JsonData\SlotTimelineData.cs" />
     <Compile Include="JsonData\TransformData.cs" />
     <Compile Include="Mesh\DbMesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DbSlot.cs" />
+    <Compile Include="Core\DbSlot.cs" />
     <Compile Include="SoundEventArgs.cs" />
     <Compile Include="SoundEventDispatcher.cs" />
     <Compile Include="Util\KeyedCollectionImpl.cs" />

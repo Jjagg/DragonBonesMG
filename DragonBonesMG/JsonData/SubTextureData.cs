@@ -1,5 +1,5 @@
 ﻿namespace DragonBonesMG.JsonData {
-    public class SubTextureData {
+    internal class SubTextureData {
 
         public string Name;
 

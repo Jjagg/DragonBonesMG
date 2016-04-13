@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    public class TextureAtlasData {
+    internal class TextureAtlasData {
         public string Name;
         public string ImagePath;
 

@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+using DragonBonesMG.Core;
 
 namespace DragonBonesMG.Animation {
 
     internal class TransformTimelineState {
-        private readonly Dictionary<string, Matrix> _boneTransforms;
+        private readonly Dictionary<string, BoneTimeline> _timelines;
 
-        public TransformTimelineState(Dictionary<string, Matrix> boneTransforms) {
-            _boneTransforms = boneTransforms;
+        public TransformTimelineState(Dictionary<string, BoneTimeline> boneTimelines) {
+            _timelines = boneTimelines;
         }
 
-        public Matrix GetTween(string boneName) {
-            Debug.Assert(_boneTransforms.ContainsKey(boneName));
-            return _boneTransforms[boneName];
+        public DbTransform GetState(string boneName) {
+            return _timelines.ContainsKey(boneName)
+                ? _timelines[boneName].Tween
+                : DbTransform.Identity;
         }
     }
 

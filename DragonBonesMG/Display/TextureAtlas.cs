@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using DragonBonesMG.JsonData;
-using DragonBonesMG.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,13 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DragonBonesMG.Display {
     public class TextureAtlas : ITextureSupplier {
 
-        public readonly string Name;
         public readonly string ImagePath;
         private readonly Dictionary<string, Rectangle> _textures;
         private Texture2D _texture;
 
-        public TextureAtlas(TextureAtlasData data) {
-            Name = data.Name;
+        internal TextureAtlas(TextureAtlasData data) {
             ImagePath = data.ImagePath;
             _textures = new Dictionary<string, Rectangle>();
             foreach (var sub in data.SubTextures)
@@ -33,7 +29,7 @@ namespace DragonBonesMG.Display {
         /// Get a drawable that will draw the given texture when drawn.
         /// Returns null if the given texture does not exist.
         /// </summary>
-        public IDrawable Get(string textureName) {
+        public IDrawableDb Get(string textureName) {
             if (!_textures.ContainsKey(textureName))
                 return null;
             return new TexturePart(_texture, _textures[textureName]);
