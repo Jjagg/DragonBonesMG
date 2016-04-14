@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    internal class TransformTimelineData {
+    internal class BoneTimelineData {
 
         [JsonProperty(PropertyName = "name")]
         public string BoneName;

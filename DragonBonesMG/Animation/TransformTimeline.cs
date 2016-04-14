@@ -13,8 +13,8 @@ namespace DragonBonesMG.Animation {
         /// Create a new TransformTimeline given the data for all bone timelines.
         /// </summary>
         /// <param name="datas"></param>
-        internal TransformTimeline(TransformTimelineData[] datas) {
-            _boneTimelines = new Dictionary<string, BoneTimeline>();
+        internal TransformTimeline(BoneTimelineData[] datas) {
+            _boneTimelines = new Dictionary<string, BoneTimeline>(datas.Length);
             foreach (var d in datas) {
                 var startFrame = 0;
                 var frames = new BoneFrame[d.BoneFrames.Length];

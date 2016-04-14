@@ -7,12 +7,12 @@ namespace DragonBonesMG.JsonData {
         public int PlayTimes;
 
         [JsonProperty(PropertyName = "bone")]
-        public TransformTimelineData[] BoneTimelines;
+        public BoneTimelineData[] BoneTimelines;
 
         [JsonProperty(PropertyName = "slot")]
         public SlotTimelineData[] SlotTimelines;
 
         [JsonProperty(PropertyName = "ffd")]
-        public FFDTimelineData[] FfdTimelines;
+        public MeshTimelineData[] MeshTimelines;
     }
 }

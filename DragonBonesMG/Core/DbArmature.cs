@@ -13,6 +13,7 @@ namespace DragonBonesMG.Core {
     // TODO Meshes, nested armature (might work, needs testing), events,
     // TODO inverse kinematics, pivot? (not sure if used in DBPro)
     // TODO general unit testing
+    // TODO content pipeline extension
     // DONE bone transform, color transform, basic rendering, texture atlas, tweening
     public class DbArmature : DbDisplay, IAnimatable {
         internal int FrameRate { get; private set; }
@@ -159,7 +160,7 @@ namespace DragonBonesMG.Core {
                 RootBone?.UpdateRecursive(animationState.TransformState);
                 // update slots
                 foreach (var slot in Slots)
-                    slot.Update(animationState.DisplayState);
+                    slot.Update(animationState.DisplayState, animationState.FFDState);
             }
             if (SlotsChanged)
                 SortSlots();

@@ -3,21 +3,14 @@ using DragonBonesMG.Curves;
 using DragonBonesMG.JsonData;
 
 namespace DragonBonesMG.Animation {
-    public class BoneFrame {
-        public readonly int StartFrame;
-        public DbTransform Transform;
-        public ITweenCurve TweenCurve;
+    public class BoneFrame : Frame {
 
-        // TODO check out Xna.Framework.Curve
+        public DbTransform Transform;
+
         internal BoneFrame(int startFrame, BoneFrameData f) {
             StartFrame = startFrame;
             Transform = new DbTransform(f.Transform);
-            var tw = f.TweenCurve;
-
-            if (tw == null || tw.Length < 4)
-                TweenCurve = new LinearCurve();
-            else
-                TweenCurve = new CubicBezier(tw[0], tw[1], tw[2], tw[3]);
+            TweenCurve = TweenFactory.FromArray(f.TweenCurve);
         }
 
     }

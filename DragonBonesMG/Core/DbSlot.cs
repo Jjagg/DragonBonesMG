@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DragonBonesMG.Core {
     public class DbSlot : DbObject {
+        #region Fields
 
         public int DisplayIndex
         {
@@ -30,11 +31,14 @@ namespace DragonBonesMG.Core {
 
         public Color ColorTransform { get; private set; }
 
+        #endregion
+
         /// <summary>
         /// This list is up for grabs for easier editing, but be careful with the transforms.
         /// </summary>
         // reformatted so transform is not INSIDE a display, in case you want the same display 
         // nested in different other animations. Why the hell do you want that?
+        // TODO is this ever userful? Would be neater without the indirection
         public readonly List<DisplayTransform> Displays;
 
         private int _displayIndex;
@@ -48,17 +52,38 @@ namespace DragonBonesMG.Core {
             ColorTransform = Color.White;
         }
 
+        #region Draw and Update
+
         /// <summary>
         /// Draw whatever is in this slot.
         /// </summary>
         public void Draw(SpriteBatch s, Matrix transform, Color parentColor) {
-            if (Displays.Count <= 0 || !Visible) return;
+            if (Displays.Count == 0 || !Visible) return;
 
             var display = Displays[DisplayIndex];
             display.Display.Draw(s,
                 display.Transform * Parent.CurrentGlobalTransform * transform,
                 ColorEx.Multiply(parentColor, ColorTransform));
         }
+
+        internal void Update(DisplayTimelineState displayState, FFDTimelineState ffdState) {
+            var s = displayState.GetState(Name);
+            if (s != null) {
+                var slotState = (SlotState) s;
+                DisplayIndex = slotState.DisplayIndex;
+                ZOrder = slotState.ZOrder;
+                ColorTransform = slotState.Color;
+            }
+
+            if (Displays.Count == 0 || !Visible) return;
+            var display = Displays[DisplayIndex].Display;
+            var mesh = display as DbMesh;
+            mesh?.Update(ffdState.GetVertices(Name));
+        }
+
+        #endregion
+
+        #region Add and Remove Displays
 
         /// <summary>
         /// Add the display to the list of displays and set it to be the active display.
@@ -103,14 +128,7 @@ namespace DragonBonesMG.Core {
             }
         }
 
-        internal void Update(DisplayTimelineState displayState) {
-            var val = displayState.GetState(Name);
-            if (val == null) return;
-            var state = (SlotState) val;
-            DisplayIndex = state.DisplayIndex;
-            ZOrder = state.ZOrder;
-            ColorTransform = state.Color;
-        }
+        #endregion
 
         public class DisplayTransform {
             public DbDisplay Display;

@@ -44,6 +44,7 @@ namespace DragonBonesMG.Animation {
             // setup timelines
             _transformTimeline = new TransformTimeline(data.BoneTimelines);
             _displayTimeline = new DisplayTimeline(data.SlotTimelines);
+            _ffdTimeline = new FFDTimeline(data.MeshTimelines);
         }
 
         #endregion
@@ -93,7 +94,7 @@ namespace DragonBonesMG.Animation {
             PassTime((float) (TimeScale * elapsed.TotalSeconds));
             _transformTimeline.Update(CurrentFrame);
             _displayTimeline.Update(CurrentFrame);
-            //_ffdTimeline.Update(frame); TODO
+            _ffdTimeline.Update(CurrentFrame);
         }
 
         #endregion
@@ -105,9 +106,7 @@ namespace DragonBonesMG.Animation {
             return new DbAnimationState(
                 _transformTimeline.GetState(),
                 _displayTimeline.GetState(),
-                null);
-            //_slotTimeline.getState(),
-            //_ffdTimeline.getState());
+                _ffdTimeline.GetState());
         }
     }
 }

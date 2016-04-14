@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    internal class SlotFrameData {
+    internal class MeshFrameData {
         public int Duration;
-        public int DisplayIndex;
+        public int Offset;
+        public float[] Vertices;
         public int? TweenEasing;
-        public int Z;
-        public ColorData Color;
 
         [JsonProperty(PropertyName = "curve")]
         public float[] TweenCurve;

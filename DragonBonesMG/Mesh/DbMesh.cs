@@ -1,4 +1,7 @@
-﻿using DragonBonesMG.Display;
+﻿using System;
+using System.Linq;
+using DragonBonesMG.Animation;
+using DragonBonesMG.Display;
 using DragonBonesMG.JsonData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,21 +27,31 @@ namespace DragonBonesMG.Mesh {
             : base(data.Name) {
             _drawable = texturer.Get(data.Name);
             _originalVertices = data.Vertices;
-            _indices = data.Triangles;
+            // reverse to go with MonoGames standard culling direction
+            // TODO ideally this would happen at content build time along with any other computation
+            _indices = data.Triangles.Reverse().ToArray();
             _uvs = data.Uvs;
             _vertices = new VertexPositionColorTexture[_originalVertices.Length / 2];
             // edges, userEdges?
         }
 
-        // TODO public constructor
-
         /// <summary>
         /// Update this mesh.
         /// </summary>
-        /// <param name="vertices"></param>
-        public void Update(Vector2[] vertices) {
-            // TODO update the vertices
+        /// <param name="state"></param>
+        public void Update(MeshTimeline state) {
             if (!_initialized) return;
+
+            var offset = state.Vertices.Any() ? state.Offset : _originalVertices.Length;
+
+            for (int i = 0; i < offset; i += 2)
+                _vertices[i / 2].Position = new Vector3(_originalVertices[i],
+                    _originalVertices[i + 1], 0f);
+            for (int i = offset; i < _originalVertices.Length; i += 2) {
+                _vertices[i / 2].Position = new Vector3(
+                    _originalVertices[i] + state.Vertices[i - offset],
+                    _originalVertices[i + 1] + state.Vertices[i - offset + 1], 0);
+            }
         }
 
         /// <summary>
@@ -49,23 +62,12 @@ namespace DragonBonesMG.Mesh {
         /// <param name="colorTransform">A color</param>
         public override void Draw(SpriteBatch s, Matrix transform, Color colorTransform) {
             if (!_initialized) Initialize(s);
-            _effect = new BasicEffect(s.GraphicsDevice) {
-                World = Matrix.Identity,
-                View = Matrix.Identity,
-                Projection = transform * _cameraMatrix,
-                Texture = _texture,
-                VertexColorEnabled = true,
-                TextureEnabled = true
-            };
-            //_effect.AmbientLightColor = colorTransform.ToVector3();
+
+            _effect.Projection = transform * _cameraMatrix;
             _indexBuffer.SetData(_indices);
             _vertexBuffer.SetData(_vertices);
             s.GraphicsDevice.SetVertexBuffer(_vertexBuffer);
             s.GraphicsDevice.Indices = _indexBuffer;
-
-            var rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            s.GraphicsDevice.RasterizerState = rasterizerState;
 
             foreach (var pass in _effect.CurrentTechnique.Passes) {
                 pass.Apply();
@@ -100,6 +102,14 @@ namespace DragonBonesMG.Mesh {
             _vertexBuffer = new DynamicVertexBuffer(graphicsDevice,
                 typeof (VertexPositionColorTexture),
                 _vertices.Length, BufferUsage.WriteOnly);
+
+            _effect = new BasicEffect(s.GraphicsDevice) {
+                World = Matrix.Identity,
+                View = Matrix.Identity,
+                Texture = _texture,
+                VertexColorEnabled = true,
+                TextureEnabled = true
+            };
 
             _initialized = true;
         }

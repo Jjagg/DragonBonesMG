@@ -52,14 +52,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation\BoneFrame.cs" />
-    <Compile Include="Animation\BoneTimeLine.cs" />
+    <Compile Include="Animation\BoneTimeline.cs" />
     <Compile Include="Animation\DbAnimationState.cs" />
     <Compile Include="Animation\DbAnimation.cs" />
+    <Compile Include="Animation\Frame.cs" />
+    <Compile Include="Animation\MeshFrame.cs" />
     <Compile Include="Animation\FFDTimeline.cs" />
     <Compile Include="Animation\FFDTimelineState.cs" />
     <Compile Include="Animation\IAnimatable.cs" />
     <Compile Include="Animation\DisplayTimeline.cs" />
     <Compile Include="Animation\DisplayTimelineState.cs" />
+    <Compile Include="Animation\MeshTimeline.cs" />
+    <Compile Include="Animation\SingleTimeline.cs" />
     <Compile Include="Animation\SlotFrame.cs" />
     <Compile Include="Animation\SlotState.cs" />
     <Compile Include="Animation\SlotTimeLine.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="Curves\CubicBezier.cs" />
     <Compile Include="Curves\ITweenCurve.cs" />
     <Compile Include="Curves\LinearCurve.cs" />
+    <Compile Include="Curves\TweenFactory.cs" />
     <Compile Include="DbIkConstraint.cs" />
     <Compile Include="Display\DbDisplay.cs" />
     <Compile Include="Display\DbImage.cs" />
@@ -84,16 +89,16 @@
     <Compile Include="JsonData\AnimationData.cs" />
     <Compile Include="JsonData\ArmatureData.cs" />
     <Compile Include="JsonData\BoneData.cs" />
-    <Compile Include="JsonData\FFDFrameData.cs" />
+    <Compile Include="JsonData\MeshFrameData.cs" />
     <Compile Include="JsonData\SlotFrameData.cs" />
     <Compile Include="JsonData\SubTextureData.cs" />
     <Compile Include="JsonData\TextureAtlasData.cs" />
-    <Compile Include="JsonData\TransformTimelineData.cs" />
+    <Compile Include="JsonData\BoneTimelineData.cs" />
     <Compile Include="JsonData\ColorData.cs" />
     <Compile Include="JsonData\DbData.cs" />
     <Compile Include="JsonData\DisplayData.cs" />
     <Compile Include="JsonData\BoneFrameData.cs" />
-    <Compile Include="JsonData\FFDTimelineData.cs" />
+    <Compile Include="JsonData\MeshTimelineData.cs" />
     <Compile Include="JsonData\IKData.cs" />
     <Compile Include="JsonData\SkinData.cs" />
     <Compile Include="JsonData\SlotData.cs" />

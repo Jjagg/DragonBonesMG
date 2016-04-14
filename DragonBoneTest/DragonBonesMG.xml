@@ -36,12 +36,27 @@
             Holds a collection of slot timelines.
             </summary>
         </member>
+        <member name="F:DragonBonesMG.Animation.MeshTimeline.Offset">
+            <summary>
+            Offset of the vertices in this timeline
+            </summary>
+        </member>
+        <member name="T:DragonBonesMG.Animation.SingleTimeline">
+            <summary>
+            Represents a timeline for a single object. (Mesh, Bone or Slot)
+            </summary>
+        </member>
+        <member name="P:DragonBonesMG.Animation.SingleTimeline.Frames">
+            <summary>
+            Note that array is covariant, but should not be. The runtime type of this arrays contents is not Frame.
+            </summary>
+        </member>
         <member name="T:DragonBonesMG.Animation.TransformTimeline">
             <summary>
             A TransformTimeline holds a collection of BoneTimelines. />.
             </summary>
         </member>
-        <member name="M:DragonBonesMG.Animation.TransformTimeline.#ctor(DragonBonesMG.JsonData.TransformTimelineData[])">
+        <member name="M:DragonBonesMG.Animation.TransformTimeline.#ctor(DragonBonesMG.JsonData.BoneTimelineData[])">
             <summary>
             Create a new TransformTimeline given the data for all bone timelines.
             </summary>
@@ -150,6 +165,20 @@
             <summary>
             Note: premultiplied alpha!
             </summary>
+        </member>
+        <member name="M:DragonBonesMG.Mesh.DbMesh.Update(DragonBonesMG.Animation.MeshTimeline)">
+            <summary>
+            Update this mesh.
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:DragonBonesMG.Mesh.DbMesh.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Draw this mesh.
+            </summary>
+            <param name="s">A spritebatch.</param>
+            <param name="transform"> A transformation matrix.</param>
+            <param name="colorTransform">A color</param>
         </member>
     </members>
 </doc>

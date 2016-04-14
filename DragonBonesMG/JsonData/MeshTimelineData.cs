@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
-    internal class FFDTimelineData {
-        // TODO figure this out
+    internal class MeshTimelineData {
 
         public string Name;
 
@@ -13,13 +12,10 @@ namespace DragonBonesMG.JsonData {
         public string SlotName;
 
         [JsonProperty(PropertyName = "skin")]
-        public string SkinName;
+        public string SkinName; // TODO what's this?
 
         [JsonProperty(PropertyName = "frame")]
-        public FFDFrameData[] FFDFrames;
-
-        [JsonProperty(PropertyName = "bone")]
-        public TransformTimelineData[] TransformFrames;
+        public MeshFrameData[] MeshFrames;
 
     }
 }
