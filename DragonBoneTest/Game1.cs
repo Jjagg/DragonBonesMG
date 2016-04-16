@@ -49,9 +49,8 @@ namespace DragonBoneTest {
             atlas = TextureAtlas.FromJson("Content/Culling.json");
             atlas.LoadContent(Content);
 
-            Armature = DragonBones.ArmatureFromJson("Content/Meshes.json", atlas);
+            Armature = DragonBones.FromJson("Content/Meshes.json", atlas, GraphicsDevice).Armature;
             Armature.GotoAndPlay("morph");
-            Armature.SetTimeScale(0.3);
 
             //Armature = DragonBones.ArmatureFromJson("Content/SolveCulling.json", atlas);
             //Armature.GotoAndPlay("tweening");
@@ -65,16 +64,27 @@ namespace DragonBoneTest {
         protected override void UnloadContent() {
         }
 
+        private KeyboardState _prevKeyboard = Keyboard.GetState();
+
+        private float _timeScale = 1.0f;
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime) {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            var keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.Escape))
                 Exit();
+            if (keyboard.IsKeyDown(Keys.OemComma) && !_prevKeyboard.IsKeyDown(Keys.OemComma))
+                _timeScale = Math.Max(_timeScale - 0.1f, -1.5f);
+            if (keyboard.IsKeyDown(Keys.OemPeriod) && !_prevKeyboard.IsKeyDown(Keys.OemPeriod))
+                _timeScale = Math.Min(_timeScale + 0.1f, 1.5f);
 
+            _prevKeyboard = keyboard;
+
+            Armature.TimeScale = _timeScale;
             Armature.Update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
