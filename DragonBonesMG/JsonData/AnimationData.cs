@@ -6,6 +6,9 @@ namespace DragonBonesMG.JsonData {
         public int Duration;
         public int PlayTimes;
 
+        [JsonProperty(PropertyName = "frame")]
+        public EventFrameData[] EventFrames;
+
         [JsonProperty(PropertyName = "bone")]
         public BoneTimelineData[] BoneTimelines;
 

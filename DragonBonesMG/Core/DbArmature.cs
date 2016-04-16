@@ -10,6 +10,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DragonBonesMG.Core {
+
+    public delegate void SoundEventHandler(object sender, DbAnimationEventArgs e);
+
+    public delegate void ActionEventHandler(object sender, DbAnimationEventArgs e);
+
+    public delegate void AnimationEventHandler(object sender, DbAnimationEventArgs e);
+
     /// <summary>
     /// This is the main DragonBones entity. Armatures have a collection of bones and slots that determine
     /// what an armature looks like and how it is transformed. It also has a collection of animations that
@@ -104,7 +111,6 @@ namespace DragonBonesMG.Core {
                 foreach (var display in fill.Displays)
                     slot.AddDisplay(display);
             }
-            SortSlots();
 
             foreach (var animation in data.Animations)
                 Animations.Add(new DbAnimation(this, animation));
@@ -112,11 +118,12 @@ namespace DragonBonesMG.Core {
             foreach (var ik in data.InverseKinematics)
                 IkConstraints.Add(new DbIkConstraint(ik)); // TODO
 
+            SortSlots();
             ResetBones();
             // load DefaultActions into Dictionary
             DefaultActions = data.DefaultActions[0];
-            if (DefaultActions.ContainsKey("gotoAndPlay") && DefaultActions["gotoAndPlay"] != "")
-                _currentAnimation = Animations[DefaultActions["gotoAndPlay"]];
+            if (DefaultActions.ContainsKey("gotoAndPlay") && Animations.Contains(DefaultActions["gotoAndPlay"]))
+                GotoAndPlay(DefaultActions["gotoAndPlay"]);
 
         }
 
@@ -212,20 +219,22 @@ namespace DragonBonesMG.Core {
         }
 
         /// <summary>
-        /// Draw this armature using the given spritebatch.
+        /// Draw this armature with the given spritebatch and optionally position, rotation (in radians) and scale.
         /// </summary>
         /// <param name="s">A spritebatch</param>
-        public void Draw(SpriteBatch s) {
-            Draw(s, Matrix.Identity);
-        }
-
-        /// <summary>
-        /// Draw this armature using the given spritebatch and transforming it with the given matrix.
-        /// </summary>
-        /// <param name="s">A spritebatch</param>
-        /// <param name="transform">The transformation matrix to apply</param>
-        public void Draw(SpriteBatch s, Matrix transform) {
-            Draw(s, transform, Color.White);
+        /// <param name="position">Position to draw at, Vector2.Zero when not passed.</param>
+        /// <param name="rotation">Rotation of the armature in radians</param>
+        /// <param name="scale">Scale of the armature along X and Y axis, Vector2.One when not passed</param>
+        public void Draw(SpriteBatch s, Vector2? position = null, float rotation = 0f, Vector2? scale = null,
+            Color? color = null) {
+            var p = position ?? Vector2.Zero;
+            var sc = scale ?? Vector2.One;
+            var c = color ?? Color.White;
+            Draw(s,
+                Matrix.CreateScale(sc.X, sc.Y, 1f) *
+                Matrix.CreateRotationZ(rotation) *
+                Matrix.CreateTranslation(p.X, p.Y, 0f),
+                c);
         }
 
         /// <summary>
@@ -287,7 +296,7 @@ namespace DragonBonesMG.Core {
         /// <param name="loop">If false the animation will stop after one full play, otherwise it will loop</param>
         public void GotoAndPlay(string animation, float time, bool loop = true) {
             GotoAnimation(animation);
-            _currentAnimation?.PassTime(time);
+            _currentAnimation?.SetTime(time);
             PlayAnimation(loop);
         }
 
@@ -298,10 +307,9 @@ namespace DragonBonesMG.Core {
         /// <param name="time">The time in the animation to set.</param>
         public void GotoAndStop(string animation, float time) {
             GotoAnimation(animation);
-            _currentAnimation?.PassTime(time);
+            _currentAnimation?.SetTime(time);
             if (_currentAnimation != null)
-                RootBone?.UpdateRecursive(_currentAnimation.GetCurrentState().TransformState,
-                    Matrix.Identity);
+                RootBone?.UpdateRecursive(_currentAnimation.GetCurrentState().TransformState);
         }
 
         /// <summary>True if an animation is loaded and it is playing, false otherwise</summary>
@@ -335,6 +343,28 @@ namespace DragonBonesMG.Core {
         /// Get the DragonBones instance that loaded this armature.
         /// </summary>
         public DragonBones Creator { get; }
+
+        #endregion
+
+        #region Events
+
+        public event ActionEventHandler DoAction;
+
+        internal void OnAction(DbAnimationEventArgs e) {
+            DoAction?.Invoke(this, e);
+        }
+
+        public event SoundEventHandler PlaySound;
+
+        internal void OnSound(DbAnimationEventArgs e) {
+            PlaySound?.Invoke(this, e);
+        }
+
+        public event AnimationEventHandler AnimationEvent;
+
+        internal void OnAnimationEvent(DbAnimationEventArgs e) {
+            AnimationEvent?.Invoke(this, e);
+        }
 
         #endregion
     }

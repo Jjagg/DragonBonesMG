@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using DragonBonesMG.Animation;
-using DragonBonesMG.Display;
 using DragonBonesMG.JsonData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace DragonBonesMG.Mesh {
+namespace DragonBonesMG.Display {
     public class DbMesh : DbDisplay {
 
         private readonly IDrawableDb _drawable;
@@ -64,7 +62,7 @@ namespace DragonBonesMG.Mesh {
                 View = Matrix.Identity,
                 Texture = _texture,
                 VertexColorEnabled = true,
-                TextureEnabled = true
+                TextureEnabled = true,
             };
         }
 
@@ -92,7 +90,19 @@ namespace DragonBonesMG.Mesh {
         /// <param name="transform"> A transformation matrix.</param>
         /// <param name="colorTransform">A color</param>
         public override void Draw(SpriteBatch s, Matrix transform, Color colorTransform) {
-            _effect.Projection = transform * _cameraMatrix;
+            // TODO use the color, probably best to write a shader for this, so we can also handle negative scale/culling there
+            var reverseCull = transform.Scale.X * transform.Scale.Y < 0;
+            var projection = transform * _cameraMatrix;
+
+            var rasterizerState = s.GraphicsDevice.RasterizerState;
+            if (reverseCull) {
+                s.GraphicsDevice.RasterizerState =
+                    new RasterizerState {
+                        CullMode = CullMode.CullClockwiseFace
+                    };
+            }
+
+            _effect.Projection = projection;
             _indexBuffer.SetData(_indices);
             _vertexBuffer.SetData(_vertices);
             s.GraphicsDevice.SetVertexBuffer(_vertexBuffer);
@@ -103,6 +113,7 @@ namespace DragonBonesMG.Mesh {
                 s.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0,
                     _indices.Length / 3);
             }
+            s.GraphicsDevice.RasterizerState = rasterizerState;
         }
     }
 }

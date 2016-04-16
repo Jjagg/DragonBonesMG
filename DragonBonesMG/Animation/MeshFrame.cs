@@ -12,7 +12,7 @@ namespace DragonBonesMG.Animation {
             StartFrame = startFrame;
             Offset = f.Offset;
             Vertices = f.Vertices;
-            TweenCurve = TweenFactory.FromArray(f.TweenCurve);
+            TweenCurve = f.TweenEasing == null ? new NoTweenCurve() : TweenFactory.FromArray(f.TweenCurve);
         }
 
     }

@@ -16,6 +16,16 @@
             This data class holds all transforms for that moment in the animation.
             </summary>
         </member>
+        <member name="T:DragonBonesMG.Animation.DbAnimation">
+            <summary>
+            DragonBones animations consist of 4 timelines (for now). A <see cref="T:DragonBonesMG.Animation.TransformTimeline"/>,
+            a <see cref="T:DragonBonesMG.Animation.DisplayTimeline"/>, an <see cref="T:DragonBonesMG.Animation.FFDTimeline"/> and an EventTimeline (as an array of <see cref="F:DragonBonesMG.Animation.DbAnimation.EventFrames"/>).
+            An armatures <see cref="T:DragonBonesMG.Animation.IAnimatable"/> methods will delegate to a DbAnimation (if one is active). 
+            <see cref="M:DragonBonesMG.Animation.DbAnimation.Update(System.TimeSpan)"/> will update all timelines. 
+            <see cref="M:DragonBonesMG.Animation.DbAnimation.GetCurrentState"/> returns a snapshot of current timeline states (except for events, those are triggered
+            automatically when a keyframe is passed).
+            </summary>
+        </member>
         <member name="M:DragonBonesMG.Animation.DbAnimation.Play(System.Boolean)">
             <summary>
             Play this animation.
@@ -26,10 +36,23 @@
             Pause this animation.
             </summary>
         </member>
+        <member name="M:DragonBonesMG.Animation.DbAnimation.SetTime(System.Single)">
+            <summary>
+            Set the animation time. Used instead of <see cref="M:DragonBonesMG.Animation.DbAnimation.PassTime(System.Single)"/> when no events should be triggered.
+            </summary>
+            <param name="time"></param>
+        </member>
         <member name="M:DragonBonesMG.Animation.DbAnimation.GetCurrentState">
             <summary>
             Calculate a snapshot of the animation at this instant and return it.
             </summary>
+        </member>
+        <member name="M:DragonBonesMG.Animation.DbAnimation.TriggerEvents(System.Single,System.Single)">
+            <summary>
+            Trigger events between a start and end frame.
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
         </member>
         <member name="T:DragonBonesMG.Animation.DisplayTimeline">
             <summary>
@@ -150,18 +173,14 @@
             </summary>
             <param name="elapsed">The time elapsed since the last call to update.</param>
         </member>
-        <member name="M:DragonBonesMG.Core.DbArmature.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+        <member name="M:DragonBonesMG.Core.DbArmature.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,System.Nullable{Microsoft.Xna.Framework.Vector2},System.Single,System.Nullable{Microsoft.Xna.Framework.Vector2},System.Nullable{Microsoft.Xna.Framework.Color})">
             <summary>
-            Draw this armature using the given spritebatch.
+            Draw this armature with the given spritebatch and optionally position, rotation (in radians) and scale.
             </summary>
             <param name="s">A spritebatch</param>
-        </member>
-        <member name="M:DragonBonesMG.Core.DbArmature.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix)">
-            <summary>
-            Draw this armature using the given spritebatch and transforming it with the given matrix.
-            </summary>
-            <param name="s">A spritebatch</param>
-            <param name="transform">The transformation matrix to apply</param>
+            <param name="position">Position to draw at, Vector2.Zero when not passed.</param>
+            <param name="rotation">Rotation of the armature in radians</param>
+            <param name="scale">Scale of the armature along X and Y axis, Vector2.One when not passed</param>
         </member>
         <member name="M:DragonBonesMG.Core.DbArmature.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix,Microsoft.Xna.Framework.Color)">
             <summary>
@@ -399,6 +418,20 @@
             <param name="path"></param>
             <returns></returns>
         </member>
+        <member name="M:DragonBonesMG.Display.DbMesh.Update(DragonBonesMG.Animation.MeshTimeline)">
+            <summary>
+            Update this mesh.
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:DragonBonesMG.Display.DbMesh.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Draw this mesh.
+            </summary>
+            <param name="s">A spritebatch.</param>
+            <param name="transform"> A transformation matrix.</param>
+            <param name="colorTransform">A color</param>
+        </member>
         <member name="T:DragonBonesMG.DragonBones">
             <summary>
             Use this class to load a DragonBones file. It contains some general data exported by DragonBones
@@ -426,7 +459,7 @@
         <member name="F:DragonBonesMG.DragonBones.FrameRate">
             <summary>The framerate set in DragonBonesPro editor. Used to determine expected playback speed.</summary>
         </member>
-        <member name="F:DragonBonesMG.DragonBones.Armatures">
+        <member name="F:DragonBonesMG.DragonBones._armatures">
             <summary>List of armatures loaded by this DragonBones instance.</summary>
         </member>
         <member name="P:DragonBonesMG.DragonBones.Armature">
@@ -461,20 +494,6 @@
             <summary>
             Note: premultiplied alpha!
             </summary>
-        </member>
-        <member name="M:DragonBonesMG.Mesh.DbMesh.Update(DragonBonesMG.Animation.MeshTimeline)">
-            <summary>
-            Update this mesh.
-            </summary>
-            <param name="state"></param>
-        </member>
-        <member name="M:DragonBonesMG.Mesh.DbMesh.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Matrix,Microsoft.Xna.Framework.Color)">
-            <summary>
-            Draw this mesh.
-            </summary>
-            <param name="s">A spritebatch.</param>
-            <param name="transform"> A transformation matrix.</param>
-            <param name="colorTransform">A color</param>
         </member>
     </members>
 </doc>

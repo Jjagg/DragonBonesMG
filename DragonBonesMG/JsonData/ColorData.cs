@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 
 namespace DragonBonesMG.JsonData {
     internal class ColorData {
-        // TODO how is this represented
 
         [JsonProperty(PropertyName = "rM")]
         public float RedMul = 1;

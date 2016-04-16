@@ -85,10 +85,7 @@ namespace DragonBonesMG.Core {
         // TODO: remove slots/bones
 
         internal void UpdateRecursive(TransformTimelineState state) {
-            UpdateRecursive(state, Matrix.Identity);
-        }
-
-        internal void UpdateRecursive(TransformTimelineState state, Matrix parentTransform) {
+            var parentTransform = Parent?.CurrentGlobalTransform ?? Matrix.Identity;
             // get the current tween transform
             _tween = state.GetState(Name);
 
@@ -98,11 +95,13 @@ namespace DragonBonesMG.Core {
 
             // and all children
             foreach (var child in Bones)
-                child.UpdateRecursive(state, CurrentGlobalTransform);
+                child.UpdateRecursive(state);
         }
 
         internal void ResetRecursive() {
             _tween = DbTransform.Identity;
+            var parentTransform = Parent?.CurrentGlobalTransform ?? Matrix.Identity;
+            CurrentGlobalTransform = Origin.GetMatrix() * parentTransform;
             foreach (var child in Bones)
                 child.ResetRecursive();
         }

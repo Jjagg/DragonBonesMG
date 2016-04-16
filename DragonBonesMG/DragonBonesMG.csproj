@@ -55,6 +55,7 @@
     <Compile Include="Animation\BoneTimeline.cs" />
     <Compile Include="Animation\DbAnimationState.cs" />
     <Compile Include="Animation\DbAnimation.cs" />
+    <Compile Include="Animation\EventFrame.cs" />
     <Compile Include="Animation\Frame.cs" />
     <Compile Include="Animation\MeshFrame.cs" />
     <Compile Include="Animation\FFDTimeline.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Curves\CubicBezier.cs" />
     <Compile Include="Curves\ITweenCurve.cs" />
     <Compile Include="Curves\LinearCurve.cs" />
+    <Compile Include="Curves\NoTweenCurve.cs" />
     <Compile Include="Curves\TweenFactory.cs" />
     <Compile Include="DbIkConstraint.cs" />
     <Compile Include="Display\DbDisplay.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="JsonData\AnimationData.cs" />
     <Compile Include="JsonData\ArmatureData.cs" />
     <Compile Include="JsonData\BoneData.cs" />
+    <Compile Include="JsonData\EventFrameData.cs" />
     <Compile Include="JsonData\MeshFrameData.cs" />
     <Compile Include="JsonData\SlotFrameData.cs" />
     <Compile Include="JsonData\SubTextureData.cs" />
@@ -105,11 +108,10 @@
     <Compile Include="JsonData\SlotFillData.cs" />
     <Compile Include="JsonData\SlotTimelineData.cs" />
     <Compile Include="JsonData\TransformData.cs" />
-    <Compile Include="Mesh\DbMesh.cs" />
+    <Compile Include="Display\DbMesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\DbSlot.cs" />
-    <Compile Include="SoundEventArgs.cs" />
-    <Compile Include="SoundEventDispatcher.cs" />
+    <Compile Include="DbAnimationEventArgs.cs" />
     <Compile Include="Util\KeyedCollectionImpl.cs" />
   </ItemGroup>
   <ItemGroup>

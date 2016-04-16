@@ -17,22 +17,21 @@ namespace DragonBonesMG.Display {
         }
 
         public override void Draw(SpriteBatch s, Matrix transform, Color parentColor) {
-            var matrix = transform;
             // check for negative scaling to allow flipped textures
             // not doing this will make textures that are flipped once (either X or Y axis, but not both)
             // not be drawn because of culling
             // having to do this explicitly makes me sad :( better solutions welcome
             // this could be done at initialization passing the spriteeffect to this function
-            var scale = matrix.Scale;
+            var scale = transform.Scale;
             var effect = SpriteEffects.None;
             if (scale.X < 0 && scale.Y > 0) {
                 effect = SpriteEffects.FlipHorizontally;
-                matrix = Matrix.CreateScale(-1, 1, 1) * matrix;
+                transform = Matrix.CreateScale(-1, 1, 1) * transform;
             } else if (scale.Y < 0 && scale.X > 0) {
                 effect = SpriteEffects.FlipVertically;
-                matrix = Matrix.CreateScale(1, -1, 1) * matrix;
+                transform = Matrix.CreateScale(1, -1, 1) * transform;
             }
-            s.Begin(transformMatrix: matrix);
+            s.Begin(transformMatrix: transform);
             _texture.Draw(s, parentColor, effect);
             s.End();
         }

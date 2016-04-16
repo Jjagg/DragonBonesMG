@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using DragonBonesMG.Animation;
 using DragonBonesMG.Display;
 using DragonBonesMG.JsonData;
-using DragonBonesMG.Mesh;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -98,12 +97,14 @@ namespace DragonBonesMG.Core {
             if (s != null) {
                 var slotState = (SlotState) s;
                 DisplayIndex = slotState.DisplayIndex;
-                ZOrder = slotState.ZOrder;
+                if (slotState.ZOrder != null)
+                    ZOrder = (int) slotState.ZOrder;
                 ColorTransform = slotState.Color;
             }
 
             if (Displays.Count == 0 || !Visible) return;
             var display = Displays[DisplayIndex].Display;
+            // update the current display if it's a mesh
             var mesh = display as DbMesh;
             mesh?.Update(ffdState.GetVertices(Name));
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DragonBonesMG.Display {
@@ -8,6 +9,7 @@ namespace DragonBonesMG.Display {
         private readonly Rectangle _bounds;
 
         public TexturePart(Texture2D texture, Rectangle bounds) {
+            if (texture == null) throw new ArgumentNullException(nameof(texture));
             _texture = texture;
             _bounds = bounds;
         }

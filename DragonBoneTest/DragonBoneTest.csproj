@@ -67,9 +67,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Content\Culling.json" />
+    <None Include="Content\Demon.json" />
     <None Include="Content\DemonTexture.json" />
-    <None Include="Content\Demon_2.json" />
-    <None Include="Content\Dragon_Test.json" />
+    <None Include="Content\Dragon.json" />
     <None Include="Content\Meshes.json" />
     <None Include="Content\SolveCulling.json" />
     <None Include="Content\texture.json" />

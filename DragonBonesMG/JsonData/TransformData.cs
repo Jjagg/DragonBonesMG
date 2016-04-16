@@ -11,7 +11,7 @@ namespace DragonBonesMG.JsonData {
 
         public Matrix ToMatrix() {
             return Matrix.CreateScale(scX, scY, 1) *
-                   Matrix.CreateRotationZ(SkX) *
+                   Matrix.CreateRotationZ(MathHelper.ToRadians(SkX)) *
                    Matrix.CreateTranslation(X, Y, 0);
         }
     }

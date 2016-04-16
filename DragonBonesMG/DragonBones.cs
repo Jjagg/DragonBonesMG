@@ -21,10 +21,8 @@ namespace DragonBonesMG {
         // - IK
         // - dynamic animation building (more add/remove stuff)
         // - playtimes? Is loop bool enough?
-        // - no tween animation
         // - events
         // - mesh code cleanup
-        // - mesh anti-alias
         // - content pipeline extension!
         // - clean up timeline initialization (~ duplicate code)
         // - some more documentation
@@ -40,7 +38,6 @@ namespace DragonBonesMG {
         // - texture atlas
         // - tweening
         // - ffd
-        // - negative timescale
 
         /// <summary>The name of this DragonBones instance.</summary>
         public readonly string Name;
@@ -61,24 +58,24 @@ namespace DragonBonesMG {
         public readonly int FrameRate;
 
         /// <summary>List of armatures loaded by this DragonBones instance.</summary>
-        private readonly List<DbArmature> Armatures;
+        private readonly List<DbArmature> _armatures;
 
         /// <summary>
         /// Get the first loaded armature from this DragonBones instance or null if none is present.
         /// </summary>
         /// <remarks>Pretty convenient for a DB instance with just one armature, which is often the case.</remarks>
-        public DbArmature Armature => Armatures.FirstOrDefault();
+        public DbArmature Armature => _armatures.FirstOrDefault();
 
         internal DragonBones(ITextureSupplier texturer, GraphicsDevice graphics, DbData data) {
             Name = data.Name;
             Version = data.Version;
             IsGlobal = data.IsGlobal;
             FrameRate = data.FrameRate;
-            Armatures = new List<DbArmature>();
+            _armatures = new List<DbArmature>();
             foreach (var armatureData in data.Armatures) {
                 var armature = new DbArmature(armatureData.Name, texturer, graphics, this);
                 armature.Initialize(armatureData);
-                Armatures.Add(armature);
+                _armatures.Add(armature);
             }
         }
 
@@ -89,7 +86,7 @@ namespace DragonBonesMG {
         /// <returns>A DbArmature with <see cref="DbDisplay.Name"/>name or null if no armature with
         /// the given name is loaded</returns>
         public DbArmature GetArmature(string name) {
-            return Armatures.FirstOrDefault(a => a.Name == name);
+            return _armatures.FirstOrDefault(a => a.Name == name);
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace DragonBonesMG.Animation {
     public class SlotFrame : Frame {
 
         public readonly int DisplayIndex;
-        public readonly int ZOrder;
+        public readonly int? ZOrder;
         public readonly Color Color;
 
         internal SlotFrame(int startFrame, SlotFrameData f) {
@@ -14,7 +14,7 @@ namespace DragonBonesMG.Animation {
             DisplayIndex = f.DisplayIndex;
             ZOrder = f.Z;
             Color = f.Color;
-            TweenCurve = TweenFactory.FromArray(f.TweenCurve);
+            TweenCurve = f.TweenEasing == null ? new NoTweenCurve() : TweenFactory.FromArray(f.TweenCurve);
         }
 
     }

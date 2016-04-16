@@ -13,6 +13,5 @@ namespace DragonBonesMG.Animation {
         bool IsAnimating();
         bool IsDoneAnimating();
         void Update(TimeSpan elapsed);
-        void Draw(SpriteBatch s, Matrix transform);
     }
 }

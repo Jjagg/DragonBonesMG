@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using DragonBonesMG;
 using DragonBonesMG.Core;
 using DragonBonesMG.Display;
@@ -12,10 +13,14 @@ namespace DragonBoneTest {
     /// </summary>
     public class Game1 : Game {
 
-        private TextureAtlas atlas;
-        private DbArmature Armature { get; set; }
+        private TextureAtlas _dragonAtlas;
+        private DbArmature _dragonArmature;
 
-        private RenderTarget2D _buffer;
+        private TextureAtlas _demonAtlas;
+        private DbArmature _demonArmature;
+
+        private TextureAtlas _meshAtlas;
+        private DbArmature _meshArmature;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -44,18 +49,28 @@ namespace DragonBoneTest {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _buffer = new RenderTarget2D(GraphicsDevice, 1000, 2000);
+            _demonAtlas = TextureAtlas.FromJson("Content/DemonTexture.json");
+            _demonAtlas.LoadContent(Content);
+            _demonArmature = DragonBones.FromJson("Content/Demon.json", _demonAtlas, GraphicsDevice).Armature;
 
-            atlas = TextureAtlas.FromJson("Content/Culling.json");
-            atlas.LoadContent(Content);
+            _dragonAtlas = TextureAtlas.FromJson("Content/texture.json");
+            _dragonAtlas.LoadContent(Content);
+            _dragonArmature = DragonBones.FromJson("Content/Dragon.json", _dragonAtlas, GraphicsDevice).Armature;
 
-            Armature = DragonBones.FromJson("Content/Meshes.json", atlas, GraphicsDevice).Armature;
-            Armature.GotoAndPlay("morph");
+            //_dragonArmature.PlaySound += (s, e) => Debug.WriteLine("Got sound event: " + e.Name);
+            //_dragonArmature.DoAction += (s, e) => Debug.WriteLine("Got action event: " + e.Name);
+            _dragonArmature.AnimationEvent +=
+                delegate(object s, DbAnimationEventArgs e) {
+                    Debug.WriteLine("Got animation event: " + e.Name + "; " + switched);
+                    switched = !switched;
+                };
 
-            //Armature = DragonBones.ArmatureFromJson("Content/SolveCulling.json", atlas);
-            //Armature.GotoAndPlay("tweening");
-            //Armature.SetTimeScale(0.3);
+            _meshAtlas = TextureAtlas.FromJson("Content/Culling.json");
+            _meshAtlas.LoadContent(Content);
+            _meshArmature = DragonBones.FromJson("Content/Meshes.json", _meshAtlas, GraphicsDevice).Armature;
         }
+
+        private bool switched;
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -84,8 +99,14 @@ namespace DragonBoneTest {
 
             _prevKeyboard = keyboard;
 
-            Armature.TimeScale = _timeScale;
-            Armature.Update(gameTime.ElapsedGameTime);
+            _demonArmature.TimeScale = _timeScale;
+            _demonArmature.Update(gameTime.ElapsedGameTime);
+
+            _dragonArmature.TimeScale = _timeScale;
+            _dragonArmature.Update(gameTime.ElapsedGameTime);
+
+            _meshArmature.TimeScale = _timeScale;
+            _meshArmature.Update(gameTime.ElapsedGameTime);
 
             base.Update(gameTime);
         }
@@ -96,18 +117,10 @@ namespace DragonBoneTest {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
-            var texture = atlas.Get("Culling").RenderToTexture(spriteBatch);
 
-            Armature.Draw(spriteBatch, Matrix.CreateTranslation(300, 200, 0), new Color(0, 0.5f, 1));
-
-            spriteBatch.Begin(transformMatrix:
-                Matrix.CreateRotationZ(MathHelper.PiOver4) * Matrix.CreateTranslation(100, 100, 0));
-
-            atlas.Get("Culling").Draw(spriteBatch);
-            spriteBatch.Draw(texture, new Vector2(100));
-
-            spriteBatch.End();
-            base.Draw(gameTime);
+            _dragonArmature.Draw(spriteBatch, new Vector2(120f, 170f), 0f, new Vector2(-0.3f, 0.3f));
+            _demonArmature.Draw(spriteBatch, new Vector2(400f, 270f), 0f, new Vector2(-0.5f, 0.5f));
+            _meshArmature.Draw(spriteBatch, new Vector2(100f, 350f), 0f, new Vector2(-1f, 1f));
         }
     }
 }

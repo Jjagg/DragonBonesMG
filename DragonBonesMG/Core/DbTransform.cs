@@ -29,7 +29,7 @@ namespace DragonBonesMG.Core {
 
         [Pure]
         public Matrix GetMatrix() {
-            return Matrix.CreateScale(new Vector3(Scale, 0f)) *
+            return Matrix.CreateScale(new Vector3(Scale, 1f)) *
                    Matrix.CreateFromQuaternion(Rotation) *
                    Matrix.CreateTranslation(new Vector3(Translation, 0f));
         }
