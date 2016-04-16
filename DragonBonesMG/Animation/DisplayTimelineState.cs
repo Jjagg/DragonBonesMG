@@ -2,9 +2,9 @@
 
 namespace DragonBonesMG.Animation {
     internal class DisplayTimelineState {
-        private readonly Dictionary<string, SlotTimeLine> _slotTimelines;
+        private readonly Dictionary<string, SlotTimeline> _slotTimelines;
 
-        public DisplayTimelineState(Dictionary<string, SlotTimeLine> slotTimelines) {
+        public DisplayTimelineState(Dictionary<string, SlotTimeline> slotTimelines) {
             _slotTimelines = slotTimelines;
         }
 

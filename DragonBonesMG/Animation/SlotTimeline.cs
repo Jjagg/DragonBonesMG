@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 namespace DragonBonesMG.Animation {
-    public class SlotTimeLine : SingleTimeline {
+    public class SlotTimeline : SingleTimeline {
 
         private readonly SlotFrame[] _frames;
         public SlotState State { get; private set; }
@@ -9,7 +9,7 @@ namespace DragonBonesMG.Animation {
         // ReSharper disable once CoVariantArrayConversion
         protected override Frame[] Frames => _frames;
 
-        public SlotTimeLine(SlotFrame[] frames) {
+        public SlotTimeline(SlotFrame[] frames) {
             _frames = frames;
         }
 

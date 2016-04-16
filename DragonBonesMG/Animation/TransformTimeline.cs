@@ -4,6 +4,7 @@ using DragonBonesMG.JsonData;
 namespace DragonBonesMG.Animation {
     /// <summary>
     /// A TransformTimeline holds a collection of BoneTimelines. />.
+    /// <seealso cref="BoneTimeline"/>
     /// </summary>
     public class TransformTimeline {
 

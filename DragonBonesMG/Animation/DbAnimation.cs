@@ -75,13 +75,23 @@ namespace DragonBonesMG.Animation {
 
         internal void PassTime(float elapsed) {
             CurrentFrame += elapsed * FrameRate;
-            if (CurrentFrame < Duration) return;
-            if (Loop) {
-                CurrentFrame -= Duration;
-            } else {
-                IsPlaying = false;
-                IsComplete = true;
-                CurrentFrame = Duration;
+            if (CurrentFrame >= Duration) {
+                if (Loop) {
+                    CurrentFrame -= Duration;
+                } else {
+                    IsPlaying = false;
+                    IsComplete = true;
+                    CurrentFrame = Duration;
+                }
+            } else if (CurrentFrame < 0) {
+                // for negative timescales elapsed will be < 0
+                if (Loop) {
+                    CurrentFrame += Duration;
+                } else {
+                    IsPlaying = false;
+                    IsComplete = true;
+                    CurrentFrame = 0;
+                }
             }
         }
 

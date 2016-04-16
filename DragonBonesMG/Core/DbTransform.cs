@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace DragonBonesMG.Core {
     /// <summary>
     /// Encapsulates a transformation matrix so we can make sure angular interpolation is done
-    /// correctly (with a quaternion rather than just linearly).
+    /// correctly (with <see cref="Quaternion.Slerp(Quaternion,Quaternion,float)"/> rather than just linearly).
     /// </summary>
     public struct DbTransform {
 
@@ -48,6 +48,13 @@ namespace DragonBonesMG.Core {
                 t1.Scale * t2.Scale);
         }
 
+        /// <summary>
+        /// Interpolate between the two given DbTransforms with the given weight.
+        /// </summary>
+        /// <param name="t1">The first transform</param>
+        /// <param name="t2">The second transform</param>
+        /// <param name="weight">Value between 0 and 1</param>
+        /// <returns>The interpolated DbTransform</returns>
         public static DbTransform Interpolate(DbTransform t1, DbTransform t2, float weight) {
             return new DbTransform(
                 Vector2.Lerp(t1.Translation, t2.Translation, weight),

@@ -21,9 +21,8 @@ namespace DragonBonesMG.Mesh {
         private BasicEffect _effect;
 
         private Matrix _cameraMatrix;
-        private bool _initialized = false;
 
-        internal DbMesh(DisplayData data, ITextureSupplier texturer)
+        internal DbMesh(DisplayData data, ITextureSupplier texturer, GraphicsDevice graphics)
             : base(data.Name) {
             _drawable = texturer.Get(data.Name);
             _originalVertices = data.Vertices;
@@ -33,6 +32,40 @@ namespace DragonBonesMG.Mesh {
             _uvs = data.Uvs;
             _vertices = new VertexPositionColorTexture[_originalVertices.Length / 2];
             // edges, userEdges?
+            Initialize(graphics);
+        }
+
+        private void Initialize(GraphicsDevice graphicsDevice) {
+            var s = new SpriteBatch(graphicsDevice);
+            var vp = graphicsDevice.Viewport;
+            _cameraMatrix =
+                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, 1);
+
+            _texture = _drawable.RenderToTexture(s);
+
+            // TODO these are all structs, so efficiency can be improved by working with pointers!
+            for (int i = 0; i < _originalVertices.Length; i += 2) {
+                var v = new VertexPositionColorTexture(
+                    new Vector3(_originalVertices[i], _originalVertices[i + 1], 0f),
+                    Color.White,
+                    new Vector2(_uvs[i], _uvs[i + 1]));
+                _vertices[i / 2] = v;
+            }
+
+            _indexBuffer = new IndexBuffer(graphicsDevice, typeof (short),
+                _indices.Length, BufferUsage.WriteOnly);
+
+            _vertexBuffer = new DynamicVertexBuffer(graphicsDevice,
+                typeof (VertexPositionColorTexture),
+                _vertices.Length, BufferUsage.WriteOnly);
+
+            _effect = new BasicEffect(s.GraphicsDevice) {
+                World = Matrix.Identity,
+                View = Matrix.Identity,
+                Texture = _texture,
+                VertexColorEnabled = true,
+                TextureEnabled = true
+            };
         }
 
         /// <summary>
@@ -40,8 +73,6 @@ namespace DragonBonesMG.Mesh {
         /// </summary>
         /// <param name="state"></param>
         public void Update(MeshTimeline state) {
-            if (!_initialized) return;
-
             var offset = state.Vertices.Any() ? state.Offset : _originalVertices.Length;
 
             for (int i = 0; i < offset; i += 2)
@@ -61,8 +92,6 @@ namespace DragonBonesMG.Mesh {
         /// <param name="transform"> A transformation matrix.</param>
         /// <param name="colorTransform">A color</param>
         public override void Draw(SpriteBatch s, Matrix transform, Color colorTransform) {
-            if (!_initialized) Initialize(s);
-
             _effect.Projection = transform * _cameraMatrix;
             _indexBuffer.SetData(_indices);
             _vertexBuffer.SetData(_vertices);
@@ -74,44 +103,6 @@ namespace DragonBonesMG.Mesh {
                 s.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0,
                     _indices.Length / 3);
             }
-        }
-
-        public void Initialize(SpriteBatch s) {
-            if (_initialized) return;
-            var graphicsDevice = s.GraphicsDevice;
-
-            var vp = graphicsDevice.Viewport;
-            _cameraMatrix =
-                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, 1);
-
-            _texture = _drawable.RenderToTexture(s);
-
-            // TODO these are all structs, so efficiency can be improved by working with pointers!
-            for (int i = 0; i < _originalVertices.Length; i += 2) {
-                var v = new VertexPositionColorTexture(
-                    new Vector3(_originalVertices[i], _originalVertices[i + 1], 0f),
-                    Color.White,
-                    new Vector2(_uvs[i], _uvs[i + 1]));
-                _vertices[i / 2] = v;
-            }
-
-
-            _indexBuffer = new IndexBuffer(graphicsDevice, typeof (short),
-                _indices.Length, BufferUsage.WriteOnly);
-
-            _vertexBuffer = new DynamicVertexBuffer(graphicsDevice,
-                typeof (VertexPositionColorTexture),
-                _vertices.Length, BufferUsage.WriteOnly);
-
-            _effect = new BasicEffect(s.GraphicsDevice) {
-                World = Matrix.Identity,
-                View = Matrix.Identity,
-                Texture = _texture,
-                VertexColorEnabled = true,
-                TextureEnabled = true
-            };
-
-            _initialized = true;
         }
     }
 }
