@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using DragonBonesMG;
 using DragonBonesMG.Core;
 using DragonBonesMG.Display;
@@ -59,18 +58,11 @@ namespace DragonBoneTest {
 
             //_dragonArmature.PlaySound += (s, e) => Debug.WriteLine("Got sound event: " + e.Name);
             //_dragonArmature.DoAction += (s, e) => Debug.WriteLine("Got action event: " + e.Name);
-            _dragonArmature.AnimationEvent +=
-                delegate(object s, DbAnimationEventArgs e) {
-                    Debug.WriteLine("Got animation event: " + e.Name + "; " + switched);
-                    switched = !switched;
-                };
 
             _meshAtlas = TextureAtlas.FromJson("Content/Culling.json");
             _meshAtlas.LoadContent(Content);
             _meshArmature = DragonBones.FromJson("Content/Meshes.json", _meshAtlas, GraphicsDevice).Armature;
         }
-
-        private bool switched;
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
