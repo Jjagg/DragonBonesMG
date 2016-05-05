@@ -21,10 +21,9 @@ namespace DragonBonesMG {
         // - IK
         // - dynamic animation building (more add/remove stuff)
         // - playtimes? Is loop bool enough?
-        // - events
         // - mesh code cleanup
         // - content pipeline extension!
-        // - clean up timeline initialization (~ duplicate code)
+        // - clean up timeline initialization (~ duplicate code, might be simplified)
         // - some more documentation
         // - nested armature (might work, needs testing)
         // - testing
@@ -38,6 +37,7 @@ namespace DragonBonesMG {
         // - texture atlas
         // - tweening
         // - ffd
+        // - events
 
         /// <summary>The name of this DragonBones instance.</summary>
         public readonly string Name;
@@ -54,7 +54,7 @@ namespace DragonBonesMG {
         /// </remarks>
         public readonly bool IsGlobal;
 
-        /// <summary>The framerate set in DragonBonesPro editor. Used to determine expected playback speed.</summary>
+        /// <summary>The framerate set in DragonBonesPro editor. Used to determine playback speed (when timescale is 1).</summary>
         public readonly int FrameRate;
 
         /// <summary>List of armatures loaded by this DragonBones instance.</summary>

@@ -29,7 +29,6 @@ namespace DragonBonesMG.Animation {
 
         private DbArmature _armature;
 
-        private SortedSet<int> _keyFrames;
         private readonly TransformTimeline _transformTimeline;
         private readonly DisplayTimeline _displayTimeline;
         private readonly FFDTimeline _ffdTimeline;
