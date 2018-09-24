@@ -1,3 +1,7 @@
+This library is no longer maintained because there is an official runtime implementation for DragonBones. You can find it at https://github.com/DragonBones/DragonBonesCSharp.
+
+_________
+
 # DragonBonesMG
 This is a [DragonBones](http://dragonbones.github.io/) runtime for [MonoGame](http://www.monogame.net/).
 Get the standalone editor for DragonBones animations, DragonBonesPro, [here](http://dragonbones.github.io/download.html). There's an open Trello board for requesting DBPro features/improvements [here](https://trello.com/b/oooKrTH8/dragonbones-idea-collection).
